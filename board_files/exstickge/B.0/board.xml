@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?> 
+<board schema_version="2.0" vendor="e-trees.jp" name="exstickge" display_name="exStickGE" url="https://e-trees.jp" preset_file="preset.xml" >
+<compatible_board_revisions>
+  <revision id="0">B.0</revision>
+</compatible_board_revisions>
+<file_version>1.1</file_version>
+<description>exStickGE</description>
+<components>
+  <component name="part0" display_name="exStickGE" type="fpga" part_name="xc7a200tsbg484-2" pin_map_file="part0_pins.xml" vendor="xilinx" spec_url="https://e-trees.jp">
+    <interfaces>
+      <interface mode="master" name="ddr3_sdram" type="xilinx.com:interface:ddrx_rtl:1.0" of_component="ddr3_sdram" preset_proc="ddr3_sdram_preset"> 
+		<description>DDR3 board interface, it can use MIG IP for connection.</description>
+		<preferred_ips>
+			<preferred_ip vendor="xilinx.com" library="ip" name="mig_7series" order="0"/>
+	  </preferred_ips>
+	  </interface>
+      <interface mode="master" name="led_3bits" type="xilinx.com:interface:gpio_rtl:1.0" of_component="led_3bits" preset_proc="led_3bits_preset">
+        <description>3 LEDs</description>
+		<preferred_ips>
+			<preferred_ip vendor="xilinx.com" library="ip" name="axi_gpio" order="0"/>
+		</preferred_ips>
+		<port_maps>
+          <port_map logical_port="TRI_O" physical_port="led_3bits_tri_o" dir="out" left="2" right="0"> 
+            <pin_maps>
+              <pin_map port_index="0" component_pin="led_3bits_tri_o_0"/> 
+              <pin_map port_index="1" component_pin="led_3bits_tri_o_1"/> 
+              <pin_map port_index="2" component_pin="led_3bits_tri_o_2"/> 
+            </pin_maps>
+          </port_map>
+        </port_maps>
+      </interface>
+    </interfaces>
+  </component>
+  
+  <component name="ddr3_sdram" display_name="DDR3 SDRAM" type="chip" sub_type="ddr" major_group="External Memory">
+	<description>256 MB DDR3L memory SODIMM </description>
+	<parameters>
+        <parameter name="ddr_type" value="ddr3"/>
+        <parameter name="size" value="256MB"/>
+	</parameters>
+  </component>
+  <component name="led_3bits" display_name="3 LEDs" type="chip" sub_type="led" major_group="GPIO">
+	<description>LEDs 2 to 0</description>
+  </component>
+</components>
+
+<jtag_chains>
+  <jtag_chain name="chain1">
+    <position name="0" component="part0"/>
+  </jtag_chain>
+</jtag_chains>
+<connections>
+</connections>
+</board>
