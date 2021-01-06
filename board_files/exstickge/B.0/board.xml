@@ -1,54 +1,506 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?> 
-<board schema_version="2.0" vendor="e-trees.jp" name="exstickge" display_name="exStickGE" url="https://e-trees.jp" preset_file="preset.xml" >
-<compatible_board_revisions>
-  <revision id="0">B.0</revision>
-</compatible_board_revisions>
-<file_version>1.1</file_version>
-<description>exStickGE</description>
-<components>
-  <component name="part0" display_name="exStickGE" type="fpga" part_name="xc7a200tsbg484-2" pin_map_file="part0_pins.xml" vendor="xilinx" spec_url="https://e-trees.jp">
-    <interfaces>
-      <interface mode="master" name="ddr3_sdram" type="xilinx.com:interface:ddrx_rtl:1.0" of_component="ddr3_sdram" preset_proc="ddr3_sdram_preset"> 
-		<description>DDR3 board interface, it can use MIG IP for connection.</description>
-		<preferred_ips>
-			<preferred_ip vendor="xilinx.com" library="ip" name="mig_7series" order="0"/>
-	  </preferred_ips>
-	  </interface>
-      <interface mode="master" name="led_3bits" type="xilinx.com:interface:gpio_rtl:1.0" of_component="led_3bits" preset_proc="led_3bits_preset">
-        <description>3 LEDs</description>
-		<preferred_ips>
-			<preferred_ip vendor="xilinx.com" library="ip" name="axi_gpio" order="0"/>
-		</preferred_ips>
-		<port_maps>
-          <port_map logical_port="TRI_O" physical_port="led_3bits_tri_o" dir="out" left="2" right="0"> 
-            <pin_maps>
-              <pin_map port_index="0" component_pin="led_3bits_tri_o_0"/> 
-              <pin_map port_index="1" component_pin="led_3bits_tri_o_1"/> 
-              <pin_map port_index="2" component_pin="led_3bits_tri_o_2"/> 
-            </pin_maps>
-          </port_map>
-        </port_maps>
-      </interface>
-    </interfaces>
-  </component>
-  
-  <component name="ddr3_sdram" display_name="DDR3 SDRAM" type="chip" sub_type="ddr" major_group="External Memory">
-	<description>256 MB DDR3L memory SODIMM </description>
-	<parameters>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<board schema_version="2.0" vendor="e-trees.jp" name="exstickge" display_name="exStickGE" url="https://e-trees.jp" preset_file="preset.xml">
+  <compatible_board_revisions>
+    <revision id="0">B.0</revision>
+  </compatible_board_revisions>
+  <file_version>1.1</file_version>
+  <description>exStickGE</description>
+  <components>
+    <component name="part0" display_name="exStickGE" type="fpga" part_name="xc7a200tsbg484-2" pin_map_file="part0_pins.xml" vendor="xilinx" spec_url="https://e-trees.jp">
+      <interfaces>
+        <interface mode="slave" name="sys_clock" type="xilinx.com:interface:diff_clock_rtl:1.0" of_component="sys_clock">
+          <port_maps>
+            <port_map logical_port="CLK_P" physical_port="SYS_CLK_P" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="SYS_CLK_P"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="CLK_N" physical_port="SYS_CLK_N" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="SYS_CLK_N"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+          <parameters>
+            <parameter name="frequency" value="200000000" />
+          </parameters>
+        </interface>
+        <interface mode="slave" name="eth_sys_clock" type="xilinx.com:signal:clock_rtl:1.0" of_component="eth_sys_clock">
+          <port_maps>
+            <port_map logical_port="CLK" physical_port="ETH_SYS_CLK" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_MAC_CLK"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+          <parameters>
+            <parameter name="frequency" value="125000000" />
+          </parameters>
+        </interface>
+        <interface mode="slave" name="reset" type="xilinx.com:signal:reset_rtl:1.0" of_component="reset">
+          <description>Onboard Reset Button</description>
+          <parameters>
+            <parameter name="rst_polarity" value="0"/>
+          </parameters>
+          <preferred_ips>
+            <preferred_ip vendor="xilinx.com" library="ip" name="proc_sys_reset" order="0"/>
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="RST" physical_port="reset" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="sys_rst_n"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <interface mode="master" name="ddr3_sdram" type="xilinx.com:interface:ddrx_rtl:1.0" of_component="ddr3_sdram" preset_proc="ddr3_sdram_preset">
+          <description>DDR3 board interface, it can use MIG IP for connection.</description>
+          <preferred_ips>
+            <preferred_ip vendor="xilinx.com" library="ip" name="mig_7series" order="0"/>
+          </preferred_ips>
+        </interface>
+        <interface mode="master" name="led_3bits" type="xilinx.com:interface:gpio_rtl:1.0" of_component="led_3bits" preset_proc="led_3bits_preset">
+          <description>3 LEDs</description>
+          <preferred_ips>
+            <preferred_ip vendor="xilinx.com" library="ip" name="axi_gpio" order="0"/>
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="TRI_O" physical_port="led_3bits_tri_o" dir="out" left="2" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="led_3bits_tri_o_0"/>
+                <pin_map port_index="1" component_pin="led_3bits_tri_o_1"/>
+                <pin_map port_index="2" component_pin="led_3bits_tri_o_2"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <!-- HDMI0 (CN2) -->
+        <!-- HDMI0 In -->
+        <interface mode="slave" name="hdmi0_in" type="digilentinc.com:interface:tmds_rtl:1.0" of_component="hdmi0_in" preset_proc="hdmi_in_preset">
+          <preferred_ips>
+            <preferred_ip vendor="digilentinc.com" library="ip" name="dvi2rgb" order="0"/>
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="CLK_P" physical_port="HDMI0_CLK_P" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_CLK_P"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="CLK_N" physical_port="HDMI0_CLK_N" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_CLK_N"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="DATA_P" physical_port="HDMI0_D_P" dir="in" left="2" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_D0_P"/>
+                <pin_map port_index="1" component_pin="HDMI0_D1_P"/>
+                <pin_map port_index="2" component_pin="HDMI0_D2_P"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="DATA_N" physical_port="HDMI0_D_N" dir="in" left="2" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_D0_N"/>
+                <pin_map port_index="1" component_pin="HDMI0_D1_N"/>
+                <pin_map port_index="2" component_pin="HDMI0_D2_N"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <interface mode="master" name="hdmi0_in_ddc" type="xilinx.com:interface:iic_rtl:1.0" of_component="hdmi0_in" preset_proc="hdmi_in_preset">
+          <description>HDMI DDC</description>
+          <preferred_ips>
+            <preferred_ip vendor="digilentinc.com" library="ip" name="dvi2rgb" order="0" />
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="SDA_I" physical_port="HDMI0_SDA" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_SDA" />
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="SDA_O" physical_port="HDMI0_SDA" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_SDA" />
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="SDA_T" physical_port="HDMI0_SDA" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_SDA" />
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="SCL_I" physical_port="HDMI0_SCL" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_SCL" />
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="SCL_O" physical_port="HDMI0_SCL" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_SCL" />
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="SCL_T" physical_port="HDMI0_SCL" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_SCL" />
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <!-- HDMI0 Out -->
+        <interface mode="master" name="hdmi0_out" type="digilentinc.com:interface:tmds_rtl:1.0" of_component="hdmi0_out">
+          <description>HDMI Out</description>
+          <preferred_ips>
+            <preferred_ip vendor="digilentinc.com" library="ip" name="rgb2dvi" order="0"/>
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="CLK_P" physical_port="HDMI0_CLK_P" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_CLK_P"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="CLK_N" physical_port="HDMI0_CLK_N" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_CLK_N"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="DATA_P" physical_port="HDMI0_D_P" dir="out" left="2" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_D0_P"/>
+                <pin_map port_index="1" component_pin="HDMI0_D1_P"/>
+                <pin_map port_index="2" component_pin="HDMI0_D2_P"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="DATA_N" physical_port="HDMI0_D_N" dir="out" left="2" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI0_D0_N"/>
+                <pin_map port_index="1" component_pin="HDMI0_D1_N"/>
+                <pin_map port_index="2" component_pin="HDMI0_D2_N"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <!-- HDMI1 (CN3) -->
+        <!-- HDMI1 In -->
+        <interface mode="slave" name="hdmi1_in" type="digilentinc.com:interface:tmds_rtl:1.0" of_component="hdmi1_in" preset_proc="hdmi_in_preset">
+          <preferred_ips>
+            <preferred_ip vendor="digilentinc.com" library="ip" name="dvi2rgb" order="0"/>
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="CLK_P" physical_port="HDMI1_CLK_P" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_CLK_P"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="CLK_N" physical_port="HDMI1_CLK_N" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_CLK_N"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="DATA_P" physical_port="HDMI1_D_P" dir="in" left="2" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_D0_P"/>
+                <pin_map port_index="1" component_pin="HDMI1_D1_P"/>
+                <pin_map port_index="2" component_pin="HDMI1_D2_P"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="DATA_N" physical_port="HDMI1_D_N" dir="in" left="2" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_D0_N"/>
+                <pin_map port_index="1" component_pin="HDMI1_D1_N"/>
+                <pin_map port_index="2" component_pin="HDMI1_D2_N"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <interface mode="master" name="hdmi1_in_ddc" type="xilinx.com:interface:iic_rtl:1.0" of_component="hdmi1_in" preset_proc="hdmi_in_preset">
+          <description>HDMI DDC</description>
+          <preferred_ips>
+            <preferred_ip vendor="digilentinc.com" library="ip" name="dvi2rgb" order="0" />
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="SDA_I" physical_port="HDMI1_SDA" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_SDA" />
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="SDA_O" physical_port="HDMI1_SDA" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_SDA" />
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="SDA_T" physical_port="HDMI1_SDA" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_SDA" />
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="SCL_I" physical_port="HDMI1_SCL" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_SCL" />
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="SCL_O" physical_port="HDMI1_SCL" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_SCL" />
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="SCL_T" physical_port="HDMI1_SCL" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_SCL" />
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <!-- HDMI1 Out -->
+        <interface mode="master" name="hdmi1_out" type="digilentinc.com:interface:tmds_rtl:1.0" of_component="hdmi1_out">
+          <description>HDMI Out</description>
+          <preferred_ips>
+            <preferred_ip vendor="digilentinc.com" library="ip" name="rgb2dvi" order="0"/>
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="CLK_P" physical_port="HDMI1_CLK_P" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_CLK_P"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="CLK_N" physical_port="HDMI1_CLK_N" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_CLK_N"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="DATA_P" physical_port="HDMI1_D_P" dir="out" left="2" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_D0_P"/>
+                <pin_map port_index="1" component_pin="HDMI1_D1_P"/>
+                <pin_map port_index="2" component_pin="HDMI1_D2_P"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="DATA_N" physical_port="HDMI1_D_N" dir="out" left="2" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="HDMI1_D0_N"/>
+                <pin_map port_index="1" component_pin="HDMI1_D1_N"/>
+                <pin_map port_index="2" component_pin="HDMI1_D2_N"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <!-- Ethernet PHY -->
+        <interface mode="master" name="rgmii" type="xilinx.com:interface:rgmii_rtl:1.0" of_component="phy_onboard" preset_proc="rgmii_preset">
+          <description>Primary interface to communicate with ethernet phy in RGMII mode. </description>
+          <preferred_ips>
+            <preferred_ip vendor="xilinx.com" library="ip" name="axi_ethernet" order="0"/>
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="TD" physical_port="rgmii_td" dir="out" left="3" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_TD_0"/>
+                <pin_map port_index="1" component_pin="GEPHY_TD_1"/>
+                <pin_map port_index="2" component_pin="GEPHY_TD_2"/>
+                <pin_map port_index="3" component_pin="GEPHY_TD_3"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="TX_CTL" physical_port="rgmii_tx_ctl" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_TXEN_ER"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="TXC" physical_port="rgmii_txc" dir="out" name="rgmii_txc">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_TCK"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="RD" physical_port="rgmii_rd" dir="out" left="3" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_RD_0"/>
+                <pin_map port_index="1" component_pin="GEPHY_RD_1"/>
+                <pin_map port_index="2" component_pin="GEPHY_RD_2"/>
+                <pin_map port_index="3" component_pin="GEPHY_RD_3"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="RX_CTL" physical_port="rgmii_rx_ctl" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_RXDV_ER"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="RXC" physical_port="rgmii_rxc" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_RCK"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <interface mode="master" name="mdio_mdc" type="xilinx.com:interface:mdio_rtl:1.0" of_component="phy_onboard">
+          <description>Secondary interface to communicate with ethernet phy when mode is selected as SGMII. </description>
+          <preferred_ips>
+            <preferred_ip vendor="xilinx.com" library="ip" name="axi_ethernet" order="0"/>
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="MDIO_I" physical_port="mdio_i" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_MDIO"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="MDIO_O" physical_port="mdio_o" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_MDIO"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="MDIO_T" physical_port="mdio_t" dir="in">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_MDIO"/>
+              </pin_maps>
+            </port_map>
+            <port_map logical_port="MDC" physical_port="mdc" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_MDC"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <interface mode="master" name="phy_reset_out" type="xilinx.com:signal:reset_rtl:1.0" of_component="phy_onboard">
+          <preferred_ips>
+            <preferred_ip vendor="xilinx.com" library="ip" name="axi_ethernet" order="0"/>
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="RESET" physical_port="phy_rst_out" dir="out">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="GEPHY_RST_N"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <!-- GPIO -->
+        <interface mode="master" name="gpio_in" type="xilinx.com:interface:gpio_rtl:1.0" of_component="gpio4p" preset_proc="gpio_in_preset">
+          <description>GPIO 4bit In</description>
+          <port_maps>
+            <port_map logical_port="TRI_I" physical_port="pmod_phy_i" dir="in" left="3" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="PMOD_1"/>
+                <pin_map port_index="1" component_pin="PMOD_2"/>
+                <pin_map port_index="2" component_pin="PMOD_3"/>
+                <pin_map port_index="3" component_pin="PMOD_4"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <interface mode="master" name="gpio_out" type="xilinx.com:interface:gpio_rtl:1.0" of_component="gpio4p" preset_proc="gpio_out_preset">
+          <description>GPIO 4bit Out</description>
+          <port_maps>
+            <port_map logical_port="TRI_O" physical_port="pmod_phy_o" dir="out" left="3" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="PMOD_1"/>
+                <pin_map port_index="1" component_pin="PMOD_2"/>
+                <pin_map port_index="2" component_pin="PMOD_3"/>
+                <pin_map port_index="3" component_pin="PMOD_4"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+        <interface mode="master" name="dipsw2p" type="xilinx.com:interface:gpio_rtl:1.0" of_component="dipsw2p" preset_proc="dipsw2p_preset">
+          <description>DIP Switches 2bit</description>
+          <preferred_ips>
+            <preferred_ip vendor="xilinx.com" library="ip" name="axi_gpio" order="0"/>
+          </preferred_ips>
+          <port_maps>
+            <port_map logical_port="TRI_I" physical_port="dip_switches_2bits_tri_i" dir="in" left="1" right="0">
+              <pin_maps>
+                <pin_map port_index="0" component_pin="DIPSW_1"/>
+                <pin_map port_index="1" component_pin="DIPSW_2"/>
+              </pin_maps>
+            </port_map>
+          </port_maps>
+        </interface>
+      </interfaces>
+    </component>
+    <!-- Components -->
+    <!-- Clock Sources -->
+    <component name="sys_clock" display_name="System Differential Clock" type="chip" sub_type="system_clock" major_group="Clock Sources"/>
+    <component name="eth_sys_clock" display_name="Ethernet Phy System Clock" type="chip" sub_type="system_clock" major_group="Clock Sources"/>
+    <!-- Reset Button -->
+    <component name="reset" display_name="System Reset" type="chip" sub_type="system_reset" major_group="Reset">
+      <description>Reset Push Button, active low</description>
+    </component>
+    <!-- HDMI I/O -->
+    <component name="hdmi0_in" display_name="HDMI0 In" type="chip" sub_type="fixed_io" major_group="HDMI0 (CN2)">
+      <description>HDMI input CN2 (Requires Digilent's TMDS interface)</description>
+      <component_modes>
+        <component_mode name="HDMI0_IN" display_name="HDMI0 In">
+          <interfaces>
+            <interface name="hdmi0_in" order="0" />
+            <interface name="hdmi0_in_ddc" order="1" />
+          </interfaces>
+        </component_mode>
+      </component_modes>
+    </component>
+    <component name="hdmi0_out" display_name="HDMI0 Out" type="chip" sub_type="fixed_io" major_group="HDMI0 (CN2)">
+      <description>HDMI Out CN2 (Requires Digilent's TMDS interface)</description>
+    </component>
+    <component name="hdmi1_in" display_name="HDMI1 In" type="chip" sub_type="fixed_io" major_group="HDMI1 (CN3)">
+      <description>HDMI input CN3 (Requires Digilent's TMDS interface)</description>
+      <component_modes>
+        <component_mode name="HDMI1_IN" display_name="HDMI1 In">
+          <interfaces>
+            <interface name="hdmi1_in" order="0" />
+            <interface name="hdmi1_in_ddc" order="1" />
+          </interfaces>
+        </component_mode>
+      </component_modes>
+    </component>
+    <component name="hdmi1_out" display_name="HDMI1 Out" type="chip" sub_type="fixed_io" major_group="HDMI1 (CN3)">
+      <description>HDMI Out CN3 (Requires Digilent's TMDS interface)</description>
+    </component>
+    <component name="DDR3_SDRAM" display_name="DDR3 SDRAM" type="chip" sub_type="ddr" major_group="External Memory">
+      <description>256 MB DDR3L memory SODIMM</description>
+      <parameters>
         <parameter name="ddr_type" value="ddr3"/>
         <parameter name="size" value="256MB"/>
-	</parameters>
-  </component>
-  <component name="led_3bits" display_name="3 LEDs" type="chip" sub_type="led" major_group="GPIO">
-	<description>LEDs 2 to 0</description>
-  </component>
-</components>
+      </parameters>
+    </component>
+    <component name="led_3bits" display_name="3 LEDs" type="chip" sub_type="led" major_group="GPIO">
+      <description>LEDs 2 to 0</description>
+    </component>
 
-<jtag_chains>
-  <jtag_chain name="chain1">
-    <position name="0" component="part0"/>
-  </jtag_chain>
-</jtag_chains>
-<connections>
-</connections>
+    <!-- Ethernet PHY-->
+    <component name="phy_onboard" display_name="Onboard PHY" type="chip" sub_type="ethernet" major_group="Ethernet Configurations" part_name="RTL8211E-VB" vendor="REALTEK">
+      <description>PHY on the board</description>
+      <component_modes>
+        <component_mode name="rgmii" display_name="RGMII mode">
+          <description>Ethernet RGMII MODE</description>
+          <interfaces>
+            <interface name="rgmii"/>
+            <interface name="mdio_mdc"/>
+            <interface name="phy_reset_out" optional="true"/>
+          </interfaces>
+          <preferred_ips>
+            <preferred_ip vendor="xilinx.com" library="ip" name="axi_ethernet" order="0"/>
+          </preferred_ips>
+        </component_mode>
+      </component_modes>
+    </component>
+    <!-- PMOD I/O -->
+    <component name="gpio4p" display_name="GPIO 4bit" type="chip" sub_type="fixed_io" major_group="GPIO">
+      <description>GPIO 4bit</description>
+      <component_modes>
+        <component_mode name="GPIO_OUT" display_name="GPIO Out 4bit">
+          <interfaces>
+            <interface name="gpio_out" order="0" />
+          </interfaces>
+        </component_mode>
+        <component_mode name="GPIO_IN" display_name="GPIO In 4bit">
+          <interfaces>
+            <interface name="gpio_in" order="0" />
+          </interfaces>
+        </component_mode>
+      </component_modes>
+    </component>
+    <component name="dipsw2p" display_name="DIP Switches 2bit" type="chip" sub_type="switch" major_group="GPIO">
+      <description>DIP Switches 1 to 0, set PULLDOWN</description>
+    </component>
+  </components>
+
+  <jtag_chains>
+    <jtag_chain name="chain1">
+      <position name="0" component="part0"/>
+    </jtag_chain>
+  </jtag_chains>
+  <connections>
+  </connections>
 </board>
